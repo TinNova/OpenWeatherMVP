@@ -1,5 +1,6 @@
 package com.example.tin.openweathermvp;
 
+import android.content.Context;
 import android.content.Intent;
 
 import com.example.tin.openweathermvp.models.Weather;
@@ -7,15 +8,14 @@ import com.example.tin.openweathermvp.models.Weather;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
-/**
- * Created by Tin on 22/05/2018.
- */
 
 public interface MainContract {
 
     interface MainScreen {
 
         void showLoading();
+
+        void hideLoading();
 
         void startWeatherService(Intent intent);
 
@@ -24,7 +24,7 @@ public interface MainContract {
 
     interface MainPresenter {
 
-        void getWeatherData() throws MalformedURLException;
+        void getWeatherData(Context context) throws MalformedURLException;
 
     }
 }

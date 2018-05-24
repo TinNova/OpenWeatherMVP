@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.tin.openweathermvp.models.IntentServiceUtils;
 import com.example.tin.openweathermvp.models.NetworkConnection;
 import com.example.tin.openweathermvp.models.NetworkListener;
 import com.example.tin.openweathermvp.models.NetworkUtils;
 import com.example.tin.openweathermvp.models.Weather;
-import com.example.tin.openweathermvp.models.WeatherIntentService;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -28,7 +26,7 @@ public class MainPresenter implements MainContract.MainPresenter {
 
 
     @Override
-    public void getWeatherData() throws MalformedURLException {
+    public void getWeatherData(Context context) throws MalformedURLException {
         mainScreen.showLoading();
         String url = NetworkUtils.getUrl(50.00, 50.00);
 
@@ -36,19 +34,19 @@ public class MainPresenter implements MainContract.MainPresenter {
          * Use the String URL "weatherRequestUrl" to request the JSON from the server
          * and parse it
          */
-        NetworkConnection.getInstance(this).getResponseFromHttpUrl(url, new NetworkListener() {
+        NetworkConnection.getInstance(context).getResponseFromHttpUrl(url, new NetworkListener() {
             @Override
             public void getWeatherArrayList(ArrayList<Weather> weather) {
 
-                /* Save Weather ContentValues to Bundle */
-                Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(weather);
-                    /* Send Bundle to the SqlIntentService to be saved in SQLite */
-                Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
-
-                saveSqlIntent.putExtras(weatherDataBundle);
-
-                /* Service is started from the View */
-                mainScreen.startWeatherService(saveSqlIntent);
+//                /* Save Weather ContentValues to Bundle */
+//                Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(weather);
+//                    /* Send Bundle to the SqlIntentService to be saved in SQLite */
+//                Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
+//
+//                saveSqlIntent.putExtras(weatherDataBundle);
+//
+//                /* Service is started from the View */
+//                mainScreen.startWeatherService(saveSqlIntent);
 
                 /* Show weather on screen */
                 mainScreen.showWeather(weather);
@@ -56,7 +54,7 @@ public class MainPresenter implements MainContract.MainPresenter {
                 //TODO:
                 /* This displays data delivered from JSON */
                 /* Now we need to populate the Adapter, & the Text/ImageViews*/
-                populateTodaysDate(weather);
+                //populateTodaysDate(weather);
 
             }
             // Here insert:

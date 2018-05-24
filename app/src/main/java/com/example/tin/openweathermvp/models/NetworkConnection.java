@@ -9,13 +9,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tin.openweathermvp.MainPresenter;
+import com.example.tin.openweathermvp.models.utils.WeatherJsonUtils;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-
-/**
- * Created by Tin on 22/05/2018.
- */
 
 public class NetworkConnection {
 
@@ -23,14 +20,13 @@ public class NetworkConnection {
 
     private ArrayList<Weather> mWeather = new ArrayList<>();
 
-
     private static NetworkConnection instance = null;
 
     // Required for Volley API
     private final RequestQueue mRequestQueue;
 
     private NetworkConnection(Context context) {
-        mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        mRequestQueue = Volley.newRequestQueue(context);
     }
 
     public static synchronized NetworkConnection getInstance(Context context) {
@@ -41,7 +37,7 @@ public class NetworkConnection {
     }
 
     /* This prevents the code from needed to pass the context each time */
-    public static synchronized NetworkConnection getInstance(MainPresenter mainPresenter) {
+    public static synchronized NetworkConnection getInstance() {
         if (null == instance) {
             throw new IllegalStateException(NetworkConnection.class.getSimpleName() +
                     " is not initialized, call getInstance(...) first");
@@ -50,7 +46,7 @@ public class NetworkConnection {
     }
 
 
-    public ArrayList<Weather> getResponseFromHttpUrl(String url, final NetworkListener listener) throws MalformedURLException {
+    public void getResponseFromHttpUrl(String url, final NetworkListener listener) throws MalformedURLException {
 
         /* If the mWeather ArrayList contains old data, remove it */
         if (mWeather != null) {

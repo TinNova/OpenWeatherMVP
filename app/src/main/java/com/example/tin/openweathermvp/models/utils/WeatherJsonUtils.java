@@ -1,6 +1,8 @@
-package com.example.tin.openweathermvp.models;
+package com.example.tin.openweathermvp.models.utils;
 
 import android.util.Log;
+
+import com.example.tin.openweathermvp.models.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -11,20 +11,20 @@ import android.widget.TextView;
 
 import com.example.tin.openweathermvp.R;
 import com.example.tin.openweathermvp.models.Weather;
+import com.example.tin.openweathermvp.models.utils.WeatherUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Tin on 24/05/2018.
- */
-
-public class WeatherAdapter {
+public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
 
     private List<Weather> mWeather;
+    private Context context;
 
-    public WeatherAdapter(List<Weather> mWeather) {
+    public WeatherAdapter(List<Weather> mWeather, Context context) {
         this.mWeather = mWeather;
+        this.context = context;
     }
 
     // We are passing the weather data via a method, not when the Adapter is created
@@ -63,11 +63,11 @@ public class WeatherAdapter {
 
         Weather weather = mWeather.get(position);
 
-        viewHolder.tvDate.setText(convertUnixDateToHumanReadable(weather.getUnixDateTime()));
+        viewHolder.tvDate.setText((int) weather.getUnixDateTime());
         viewHolder.tvDescription.setText(weather.getWeatherDescription());
-        viewHolder.tvTemp.setText(formatTemperature(context, weather.getTempCurrent()));
+        viewHolder.tvTemp.setText((int) weather.getTempCurrent());
 
-        Picasso.with(context).load(getSmallArtResourceIdForWeatherCondition(weather.getWeatherId()))
+        Picasso.with(context).load(WeatherUtils.getSmallArtResourceIdForWeatherCondition(weather.getWeatherId()))
                 .into(viewHolder.ivIcon);
     }
 

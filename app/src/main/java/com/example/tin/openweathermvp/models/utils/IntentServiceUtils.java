@@ -1,11 +1,15 @@
-package com.example.tin.openweathermvp.models;
+package com.example.tin.openweathermvp.models.utils;
 
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.tin.openweathermvp.models.Weather;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static com.example.tin.openweathermvp.MainPresenter.SQL_WEATHER_DATA;
 
 
 //public class IntentServiceUtils {
@@ -61,6 +65,5 @@ import java.util.Arrays;
 //        Log.d(TAG, "weatherContentValues" + Arrays.toString(weatherContentValues));
 //
 //        return weatherContentValues;
-//
 //    }
 //}

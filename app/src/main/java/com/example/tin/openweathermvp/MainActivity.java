@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
      * Needed to populate the Adapter and the RecyclerView
      */
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private WeatherAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
         try {
             mainPresenter = new MainPresenter(this);
-            mainPresenter.getWeatherData();
+            mainPresenter.getWeatherData(MainActivity.this);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
+        mAdapter = new WeatherAdapter(null, getApplicationContext());
 
     }
 
@@ -89,22 +90,30 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     /* Show Loading Indicator / Hide Weather Data */
     @Override
     public void showLoading() {
-        /* Hide the weather data UI */
-        mWeatherUi.setVisibility(View.INVISIBLE);
-        /* Show the loading indicator */
-        mLoadingIndicator.setVisibility(View.VISIBLE);
+//        /* Hide the weather data UI */
+//        mWeatherUi.setVisibility(View.INVISIBLE);
+//        /* Show the loading indicator */
+//        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+//        /* Hide the weather data UI */
+//        mWeatherUi.setVisibility(View.VISIBLE);
+//        /* Show the loading indicator */
+//        mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void startWeatherService(Intent intent) {
         /* Starts the WeatherIntentService which saves data to SQLite */
-        startService(intent);
+        //startService(intent);
     }
 
     @Override
     /* Connect to adapter and display 0th weather on the today feature */
     public void showWeather(ArrayList<Weather> weather) {
-//        mAdapter.setWeather(weather);
+        mAdapter.setWeather(weather);
 //        mAdapter = new WeatherAdapter(weather, getApplicationContext());
 
     }
