@@ -17,18 +17,22 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.tin.openweathermvp.models.utils.DateUtils.convertUnixDateToHumanReadable;
+import static com.example.tin.openweathermvp.models.utils.WeatherUtils.formatTemperature;
+
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
 
     private List<Weather> mWeather;
     private Context context;
 
+    /** CONTEXT PASSED IN VIA MAINACTIVITY<><><>IS THIS OKAY IN MVP???**/
     public WeatherAdapter(List<Weather> mWeather, Context context) {
         this.mWeather = mWeather;
         this.context = context;
     }
 
     // We are passing the weather data via a method, not when the Adapter is created
-    public void setWeather(ArrayList<Weather> weather){
+    public void setWeather(ArrayList<Weather> weather) {
         this.mWeather = weather;
         notifyDataSetChanged();
 
@@ -63,9 +67,9 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
 
         Weather weather = mWeather.get(position);
 
-        viewHolder.tvDate.setText((int) weather.getUnixDateTime());
+        viewHolder.tvDate.setText(convertUnixDateToHumanReadable(weather.getUnixDateTime()));
         viewHolder.tvDescription.setText(weather.getWeatherDescription());
-        viewHolder.tvTemp.setText((int) weather.getTempCurrent());
+        viewHolder.tvTemp.setText(formatTemperature(context, weather.getTempCurrent()));
 
         Picasso.with(context).load(WeatherUtils.getSmallArtResourceIdForWeatherCondition(weather.getWeatherId()))
                 .into(viewHolder.ivIcon);
@@ -76,8 +80,11 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
      */
     @Override
     public int getItemCount() {
-
-        return mWeather.size();
+        if (mWeather == null) {
+            return 0;
+        } else {
+            return mWeather.size();
+        }
     }
 
     /*

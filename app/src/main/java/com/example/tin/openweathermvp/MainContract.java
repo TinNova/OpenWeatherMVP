@@ -20,6 +20,9 @@ public interface MainContract {
         void startWeatherService(Intent intent);
 
         void showWeather(ArrayList<Weather> weather);
+
+        void getContext();
+
     }
 
     interface MainPresenter {

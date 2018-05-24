@@ -14,9 +14,17 @@ import android.widget.TextView;
 
 import com.example.tin.openweathermvp.models.Weather;
 import com.example.tin.openweathermvp.models.adapter.WeatherAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+
+import static com.example.tin.openweathermvp.models.utils.DateUtils.convertUnixDateToHumanReadable;
+import static com.example.tin.openweathermvp.models.utils.WeatherUtils.formatTemperature;
+import static com.example.tin.openweathermvp.models.utils.WeatherUtils.formatWindDirection;
+import static com.example.tin.openweathermvp.models.utils.WeatherUtils.formatWindSpeed;
+import static com.example.tin.openweathermvp.models.utils.WeatherUtils.getLargeArtResourceIdForWeatherCondition;
+
 
 public class MainActivity extends AppCompatActivity implements MainContract.MainScreen {
 
@@ -80,12 +88,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         LinearLayoutManager mLinearLayoutManager =
                 new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mAdapter = new WeatherAdapter(null, getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter = new WeatherAdapter(null, getApplicationContext());
 
     }
-
 
     /* Show Loading Indicator / Hide Weather Data */
     @Override
@@ -114,7 +121,22 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     /* Connect to adapter and display 0th weather on the today feature */
     public void showWeather(ArrayList<Weather> weather) {
         mAdapter.setWeather(weather);
-//        mAdapter = new WeatherAdapter(weather, getApplicationContext());
+
+        tvTodayDate.setText(convertUnixDateToHumanReadable(weather.get(0).getUnixDateTime()));
+        tvTodayDescription.setText(weather.get(0).getWeatherDescription());
+        //tvLocation.setText(formatLatLon(this, sharedPrefLatLonArray));
+        //tvLastDataUpdated.setText(formatLastUpdateTime(this, sharedPrefLatLonArray[2]));
+        tvTodayTemp.setText(formatTemperature(this, weather.get(0).getTempCurrent()));
+        tvTodayWindSpeed.setText(formatWindSpeed(this, weather.get(0).getWindSpeed()));
+        tvTodayWindDirection.setText(formatWindDirection(weather.get(0).getWindDegree()));
+
+        Picasso.with(MainActivity.this)
+                .load(getLargeArtResourceIdForWeatherCondition(weather.get(0).getWeatherId()))
+                .into(ivTodayIcon);
+    }
+
+    @Override
+    public void getContext() {
 
     }
 }
