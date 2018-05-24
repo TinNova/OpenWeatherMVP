@@ -4,13 +4,19 @@ import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.tin.openweathermvp.models.Weather;
+import com.example.tin.openweathermvp.models.adapter.WeatherAdapter;
+
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MainContract.MainScreen {
 
@@ -34,6 +40,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     private ProgressBar mLoadingIndicator;
     private TextView tvNoData;
     private ImageView ivUpdate;
+
+    /*
+     * Needed to populate the Adapter and the RecyclerView
+     */
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +73,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        /* Setting up the RecyclerView and Adapter*/
+        mRecyclerView = findViewById(R.id.rV_weatherList);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager mLinearLayoutManager =
+                new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+
     }
 
 
@@ -77,6 +99,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     public void startWeatherService(Intent intent) {
         /* Starts the WeatherIntentService which saves data to SQLite */
         startService(intent);
+    }
+
+    @Override
+    /* Connect to adapter and display 0th weather on the today feature */
+    public void showWeather(ArrayList<Weather> weather) {
+//        mAdapter.setWeather(weather);
+//        mAdapter = new WeatherAdapter(weather, getApplicationContext());
+
     }
 }
 

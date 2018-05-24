@@ -18,6 +18,10 @@ import java.util.ArrayList;
 public class MainPresenter implements MainContract.MainPresenter {
     private MainContract.MainScreen mainScreen;
 
+    /* Strings for the SQL Intent Service */
+    public static final String SQL_WEATHER_DATA = "sql_weather_data";
+
+
     MainPresenter(MainContract.MainScreen screen) throws MalformedURLException {
         this.mainScreen = screen;
     }
@@ -45,6 +49,9 @@ public class MainPresenter implements MainContract.MainPresenter {
 
                 /* Service is started from the View */
                 mainScreen.startWeatherService(saveSqlIntent);
+
+                /* Show weather on screen */
+                mainScreen.showWeather(weather);
 
                 //TODO:
                 /* This displays data delivered from JSON */
