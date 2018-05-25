@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     @Override
     public void startWeatherService(Intent intent) {
         /* Starts the WeatherIntentService which saves data to SQLite */
-        //startService(intent);
+        startService(intent);
     }
 
     @Override

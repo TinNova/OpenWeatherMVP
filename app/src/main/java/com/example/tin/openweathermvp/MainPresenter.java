@@ -8,6 +8,8 @@ import com.example.tin.openweathermvp.models.NetworkConnection;
 import com.example.tin.openweathermvp.models.NetworkListener;
 import com.example.tin.openweathermvp.models.NetworkUtils;
 import com.example.tin.openweathermvp.models.Weather;
+import com.example.tin.openweathermvp.models.WeatherIntentService;
+import com.example.tin.openweathermvp.models.utils.IntentServiceUtils;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -38,15 +40,15 @@ public class MainPresenter implements MainContract.MainPresenter {
             @Override
             public void getWeatherArrayList(ArrayList<Weather> weather) {
 
-//                /* Save Weather ContentValues to Bundle */
-//                Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(weather);
-//                    /* Send Bundle to the SqlIntentService to be saved in SQLite */
-//                Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
-//
-//                saveSqlIntent.putExtras(weatherDataBundle);
-//
-//                /* Service is started from the View */
-//                mainScreen.startWeatherService(saveSqlIntent);
+                /* Save Weather ContentValues to Bundle */
+                Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(weather);
+                    /* Send Bundle to the SqlIntentService to be saved in SQLite */
+                Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
+
+                saveSqlIntent.putExtras(weatherDataBundle);
+
+                /* Service is started from the View */
+                mainScreen.startWeatherService(saveSqlIntent);
 
                 /* Show weather on screen */
                 mainScreen.showWeather(weather);
