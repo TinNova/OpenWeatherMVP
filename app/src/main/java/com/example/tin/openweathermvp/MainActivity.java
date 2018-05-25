@@ -1,16 +1,23 @@
 package com.example.tin.openweathermvp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tin.openweathermvp.models.Weather;
 import com.example.tin.openweathermvp.models.adapter.WeatherAdapter;
@@ -55,6 +62,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     private RecyclerView mRecyclerView;
     private WeatherAdapter mAdapter;
 
+    /* Creating variables for the IntentFilter and ConnectivityBroadcastReceiver*/
+    IntentFilter mConnIntentFilter;
+    ConnectivityBroadcastReceiver mConnBroadcastReceiver;
+    boolean networkConnected;
+
+    /* Used to check if the device is connected to the internet before creating a connection */
+    private ConnectivityManager mConnectionManager;
+    private NetworkInfo mNetworkInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +107,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         mAdapter = new WeatherAdapter(null, getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
 
+        /* Instantiating the IntentFilter and adding the intent we are looking for via .addAction() */
+        mConnIntentFilter = new IntentFilter();
+        mConnIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        /* Instantiating the BroadcastReceiver */
+        mConnBroadcastReceiver = new ConnectivityBroadcastReceiver();
+        /* Used to check if the device is connected to the internet */
+        mConnectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        /* Registering the BroadcastReceiver and passing in the Intent Filter */
+        registerReceiver(mConnBroadcastReceiver, mConnIntentFilter);
 
     }
 
@@ -138,5 +164,34 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     public void getContext() {
 
     }
-}
 
+    @Override
+    public void viewOnConnectionChanged(Boolean networkConnActive) {
+
+        Toast.makeText(this, "networkConnActive? " + networkConnActive, Toast.LENGTH_SHORT).show();
+    }
+
+    private class ConnectivityBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.d(TAG, "IN METHOD, ACTION = " + action);
+            if (action != null) {
+                mConnectionManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (mConnectionManager != null)
+                    mNetworkInfo = mConnectionManager.getActiveNetworkInfo();
+                if (mNetworkInfo != null && mNetworkInfo.isConnectedOrConnecting()) {
+                    networkConnected = true;
+                    mainPresenter.onConnectionChanged(networkConnected);
+                    Log.i(TAG, "Network " + mNetworkInfo.getTypeName() + " connected");
+                } else if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE)) {
+                    networkConnected = false;
+                    mainPresenter.onConnectionChanged(networkConnected);
+                    Log.d(TAG, "No connectivity!");
+                }
+            }
+//            boolean connected = mNetworkInfo != null && isConnectedOrConnecting();
+//            mPresenter.onConnectionChanged(activeNetworkInfo,connected);
+        }
+    }
+}

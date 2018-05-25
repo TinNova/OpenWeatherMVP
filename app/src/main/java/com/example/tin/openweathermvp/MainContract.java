@@ -23,11 +23,15 @@ public interface MainContract {
 
         void getContext();
 
+        void viewOnConnectionChanged(Boolean networkConnActive);
+
     }
 
     interface MainPresenter {
 
         void getWeatherData(Context context) throws MalformedURLException;
+
+        void onConnectionChanged(Boolean networkConnActive);
 
     }
 }
