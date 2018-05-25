@@ -50,6 +50,7 @@ public class MainPresenter implements MainContract.MainPresenter {
 
                 /* Show weather on screen */
                 mainScreen.showWeather(weather);
+                mainScreen.hideLoading();
 
                 //TODO:
                 /* This displays data delivered from JSON */

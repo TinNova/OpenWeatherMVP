@@ -94,21 +94,20 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
     }
 
-    /* Show Loading Indicator / Hide Weather Data */
     @Override
     public void showLoading() {
-//        /* Hide the weather data UI */
-//        mWeatherUi.setVisibility(View.INVISIBLE);
-//        /* Show the loading indicator */
-//        mLoadingIndicator.setVisibility(View.VISIBLE);
+        /* Hide the weather data UI */
+        mWeatherUi.setVisibility(View.INVISIBLE);
+        /* Show the loading indicator */
+        mLoadingIndicator.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-//        /* Hide the weather data UI */
-//        mWeatherUi.setVisibility(View.VISIBLE);
-//        /* Show the loading indicator */
-//        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        /* Hide the weather data UI */
+        mWeatherUi.setVisibility(View.VISIBLE);
+        /* Show the loading indicator */
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
     @Override
