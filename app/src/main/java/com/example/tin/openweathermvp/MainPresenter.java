@@ -40,6 +40,7 @@ public class MainPresenter implements MainContract.MainPresenter {
         this.mainScreen = screen;
     }
 
+    ArrayList<Weather> mWeather;
 
     @Override
     public void getWeatherData(Context context, ConnectivityManager connectivityManager) throws MalformedURLException {
@@ -61,8 +62,9 @@ public class MainPresenter implements MainContract.MainPresenter {
                 @Override
                 public void getWeatherArrayList(ArrayList<Weather> weather) {
 
+                    mWeather = weather;
                 /* Save Weather ContentValues to Bundle */
-                    Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(weather);
+                    Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(mWeather);
                     /* Send Bundle to the SqlIntentService to be saved in SQLite */
                     Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
 
@@ -74,28 +76,20 @@ public class MainPresenter implements MainContract.MainPresenter {
                 /* Show weather on screen */
                     mainScreen.showWeather(weather);
                     mainScreen.hideLoading();
-
-                    //TODO:
-                /* This displays data delivered from JSON */
-                /* Now we need to populate the Adapter, & the Text/ImageViews*/
-                    //populateTodaysDate(weather);
-
                 }
-                // Here insert:
-                // 1. mainScreen.showLoading(); // Launches showLoading Method in MainScreen/MainActivity
-                // 2. url = NetworkUtils.getUrl(); // Now url wil contain the url constructed from a method in the NetworkUtils Class
-                // 3. mWeather = getWeatherArrayList(url); // Passes url to getWeatherArrayList method which uses Volley to request response, then it'll be parsed, and passed here
-                // 4. mainScreen.showWeather(mWeather); // This sends the mWeather ArrayList to MainActivity where it'll be added to the adapter
-                // 5. mainScreen.hideLoading();
             });
+        } else if (mWeather != null) {
+
+            /* Only display an no internet Toast, there is no need to load the SQL data as the
+            * current data on the screen will be the most up to date, saves having to launch a loader */
+            mainScreen.showNoNetworkMessage();
+
         } else {
 
-            //mainScreen.showLoading();
+            /* Show a no data screen, or if you have time, display the SQL data */
+            mainScreen.showNoDataScreen();
 
-            /** IF mNETWORKCONNACTIVE == FALSE, LOAD DATA FROM SQL**/
         }
-            /** ELSE IF SQL DATA == 0 or NULL SHOW NO DATA SCREEN **/
-
     }
 
     @Override

@@ -24,8 +24,12 @@ public interface MainContract {
 
         void getContext();
 
+        /* Whenever BroadcastReceiver detects a network change the user is notified via a Toast*/
         void viewOnConnectionChanged(Boolean networkConnActive);
 
+        void showNoNetworkMessage();
+
+        void showNoDataScreen();
     }
 
     interface MainPresenter {
@@ -33,7 +37,5 @@ public interface MainContract {
         void getWeatherData(Context context, ConnectivityManager connectivityManager) throws MalformedURLException;
 
         void onConnectionChanged(Boolean networkConnActive);
-
     }
-
 }

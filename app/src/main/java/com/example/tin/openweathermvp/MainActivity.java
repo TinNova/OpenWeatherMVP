@@ -76,9 +76,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /* Initialising all of the views */
+        /* Initialising all of the buttons */
         btnRefreshData = findViewById(R.id.bt_refresh);
         ivUpdate = findViewById(R.id.iV_updateData);
+        /* Initialising all of the views */
         mWeatherUi = findViewById(R.id.l_weatherUi);
         mLoadingIndicator = findViewById(R.id.pB_loading_indicator);
         tvNoData = findViewById(R.id.tV_noData);
@@ -118,23 +119,36 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             e.printStackTrace();
         }
 
+        /* Button used to refresh the weather data */
+        btnRefreshData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                //downloadResponseOrDisplaySqlData();
+            }
+        });
+
+        /* ImageView with onClickListener used to update the weather data */
+        ivUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                //downloadResponseOrDisplaySqlData();
+            }
+        });
+
     }
 
-    @Override
-    public void showLoading() {
-        /* Hide the weather data UI */
-        mWeatherUi.setVisibility(View.INVISIBLE);
-        /* Show the loading indicator */
-        mLoadingIndicator.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideLoading() {
-        /* Hide the weather data UI */
-        mWeatherUi.setVisibility(View.VISIBLE);
-        /* Show the loading indicator */
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
-    }
 
     @Override
     public void startWeatherService(Intent intent) {
@@ -171,6 +185,41 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         Toast.makeText(this, "networkConnActive? " + networkConnActive, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showLoading() {
+        /* Hide the weather data UI */
+        mWeatherUi.setVisibility(View.INVISIBLE);
+        /* Show the loading indicator */
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        /* Hide the weather data UI */
+        mWeatherUi.setVisibility(View.VISIBLE);
+        /* Show the loading indicator */
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+    }
+
+
+    @Override
+    public void showNoNetworkMessage() {
+        Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNoDataScreen() {
+        /* Hide the weather data UI */
+        mWeatherUi.setVisibility(View.INVISIBLE);
+        /* Hide the loading indicator */
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        /* Show refresh button */
+        btnRefreshData.setVisibility(View.VISIBLE);
+        /* Show the No Data Text */
+        tvNoData.setVisibility(View.VISIBLE);
+    }
+
+
     private class ConnectivityBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -190,8 +239,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
                     Log.d(TAG, "No connectivity!");
                 }
             }
-//            boolean connected = mNetworkInfo != null && isConnectedOrConnecting();
-//            mPresenter.onConnectionChanged(activeNetworkInfo,connected);
         }
     }
 }
