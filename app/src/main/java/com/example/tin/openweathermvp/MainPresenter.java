@@ -2,6 +2,8 @@ package com.example.tin.openweathermvp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,9 +27,13 @@ public class MainPresenter implements MainContract.MainPresenter {
     /* Strings for the SQL Intent Service */
     public static final String SQL_WEATHER_DATA = "sql_weather_data";
 
-    private Boolean mNetworkConnActive = false;
+    private Boolean mNetworkConnActive;
 
     private Context mContext;
+
+    // Used to check if the device has internet connection
+    private ConnectivityManager connectionManager;
+    private NetworkInfo networkInfo;
 
 
     MainPresenter(MainContract.MainScreen screen) throws MalformedURLException {
@@ -36,11 +42,16 @@ public class MainPresenter implements MainContract.MainPresenter {
 
 
     @Override
-    public void getWeatherData(Context context) throws MalformedURLException {
-        if (mNetworkConnActive) {
+    public void getWeatherData(Context context, ConnectivityManager connectivityManager) throws MalformedURLException {
+         /* Checking If The Device Is Connected To The Internet */
+        if (connectivityManager != null)
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+
             mContext = context;
-            mainScreen.showLoading();
             String url = NetworkUtils.getUrl(50.00, 50.00);
+            mainScreen.showLoading();
+
 
         /*
          * Use the String URL "weatherRequestUrl" to request the JSON from the server

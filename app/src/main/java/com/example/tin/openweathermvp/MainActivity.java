@@ -91,13 +91,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         ivTodayIcon = findViewById(R.id.iV_todayIcon);
         tvLastDataUpdated = findViewById(R.id.tV_lastUpdate);
 
-        try {
-            mainPresenter = new MainPresenter(this);
-            mainPresenter.getWeatherData(MainActivity.this);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
         /* Setting up the RecyclerView and Adapter*/
         mRecyclerView = findViewById(R.id.rV_weatherList);
         mRecyclerView.setHasFixedSize(true);
@@ -117,6 +110,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
         /* Registering the BroadcastReceiver and passing in the Intent Filter */
         registerReceiver(mConnBroadcastReceiver, mConnIntentFilter);
+
+        try {
+            mainPresenter = new MainPresenter(this);
+            mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
     }
 

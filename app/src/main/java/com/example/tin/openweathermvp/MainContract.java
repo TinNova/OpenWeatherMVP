@@ -2,6 +2,7 @@ package com.example.tin.openweathermvp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 
 import com.example.tin.openweathermvp.models.Weather;
 
@@ -29,9 +30,10 @@ public interface MainContract {
 
     interface MainPresenter {
 
-        void getWeatherData(Context context) throws MalformedURLException;
+        void getWeatherData(Context context, ConnectivityManager connectivityManager) throws MalformedURLException;
 
         void onConnectionChanged(Boolean networkConnActive);
 
     }
+
 }
