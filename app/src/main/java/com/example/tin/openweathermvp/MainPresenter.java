@@ -44,6 +44,7 @@ public class MainPresenter implements MainContract.MainPresenter {
 
     @Override
     public void getWeatherData(Context context, ConnectivityManager connectivityManager) throws MalformedURLException {
+
          /* Checking If The Device Is Connected To The Internet */
         if (connectivityManager != null)
             networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -88,7 +89,7 @@ public class MainPresenter implements MainContract.MainPresenter {
 
             /* Show a no data screen, or if you have time, display the SQL data */
             mainScreen.showNoDataScreen();
-
+            mainScreen.showNoNetworkMessage();
         }
     }
 

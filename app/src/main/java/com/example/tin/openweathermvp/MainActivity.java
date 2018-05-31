@@ -71,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     private ConnectivityManager mConnectionManager;
     private NetworkInfo mNetworkInfo;
 
+//    /* Tells main presenter if the noDataScreen is active */
+//    boolean noDataScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         /* Registering the BroadcastReceiver and passing in the Intent Filter */
         registerReceiver(mConnBroadcastReceiver, mConnIntentFilter);
 
+//        noDataScreen = false;
+
         try {
             mainPresenter = new MainPresenter(this);
             mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
@@ -119,36 +124,37 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             e.printStackTrace();
         }
 
-        /* Button used to refresh the weather data */
-        btnRefreshData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                //downloadResponseOrDisplaySqlData();
-            }
-        });
-
         /* ImageView with onClickListener used to update the weather data */
         ivUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+//                noDataScreen = false;
+
                 try {
                     mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-                //downloadResponseOrDisplaySqlData();
+            }
+        });
+
+        /* Button used to refresh the weather data */
+        btnRefreshData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                noDataScreen = true;
+
+                try {
+                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
     }
-
 
     @Override
     public void startWeatherService(Intent intent) {
@@ -191,6 +197,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         mWeatherUi.setVisibility(View.INVISIBLE);
         /* Show the loading indicator */
         mLoadingIndicator.setVisibility(View.VISIBLE);
+        /* Hide the No Data Text */
+        tvNoData.setVisibility(View.INVISIBLE);
+        /* Hide refresh button */
+        btnRefreshData.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -199,6 +209,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         mWeatherUi.setVisibility(View.VISIBLE);
         /* Show the loading indicator */
         mLoadingIndicator.setVisibility(View.INVISIBLE);
+        /* Hide the No Data Text */
+        tvNoData.setVisibility(View.INVISIBLE);
+        /* Hide refresh button */
+        btnRefreshData.setVisibility(View.INVISIBLE);
     }
 
 
