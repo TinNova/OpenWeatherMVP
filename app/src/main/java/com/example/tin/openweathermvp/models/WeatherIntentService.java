@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.tin.openweathermvp.MainPresenter;
 import com.example.tin.openweathermvp.models.sql.WeatherContract;
 import com.example.tin.openweathermvp.models.utils.IntentServiceUtils;
+import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 
 import java.util.ArrayList;
 

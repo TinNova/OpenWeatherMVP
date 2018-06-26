@@ -6,12 +6,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.tin.openweathermvp.models.NetworkConnection;
-import com.example.tin.openweathermvp.models.NetworkListener;
-import com.example.tin.openweathermvp.models.NetworkUtils;
-import com.example.tin.openweathermvp.models.Weather;
+import com.example.tin.openweathermvp.models.volleyNetwork.NetworkConnection;
+import com.example.tin.openweathermvp.models.volleyNetwork.NetworkListener;
+import com.example.tin.openweathermvp.models.volleyNetwork.NetworkUtils;
+import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.WeatherIntentService;
 import com.example.tin.openweathermvp.models.utils.IntentServiceUtils;
 

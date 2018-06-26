@@ -1,4 +1,4 @@
-package com.example.tin.openweathermvp.models;
+package com.example.tin.openweathermvp.models.volleyNetwork;
 
 import android.content.Context;
 import android.util.Log;

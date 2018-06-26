@@ -19,12 +19,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tin.openweathermvp.models.Weather;
+import com.example.tin.openweathermvp.models.retrofitNetwork.ApiMethods;
+import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherModel;
+import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.adapter.WeatherAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.tin.openweathermvp.models.utils.DateUtils.convertUnixDateToHumanReadable;
 import static com.example.tin.openweathermvp.models.utils.WeatherUtils.formatTemperature;
@@ -79,78 +87,105 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /* Initialising all of the buttons */
-        btnRefreshData = findViewById(R.id.bt_refresh);
-        ivUpdate = findViewById(R.id.iV_updateData);
-        /* Initialising all of the views */
-        mWeatherUi = findViewById(R.id.l_weatherUi);
-        mLoadingIndicator = findViewById(R.id.pB_loading_indicator);
-        tvNoData = findViewById(R.id.tV_noData);
-        tvTodayDate = findViewById(R.id.tV_todayDate);
-        tvTodayTemp = findViewById(R.id.tV_todayTemp);
-        tvTodayDescription = findViewById(R.id.tV_todayDescription);
-        tvTodayWindSpeed = findViewById(R.id.tV_todayWindSpeed);
-        tvTodayWindDirection = findViewById(R.id.tV_todayWindDirection);
-        tvLocation = findViewById(R.id.tV_lastLocation);
-        ivTodayIcon = findViewById(R.id.iV_todayIcon);
-        tvLastDataUpdated = findViewById(R.id.tV_lastUpdate);
+//        /* Initialising all of the buttons */
+//        btnRefreshData = findViewById(R.id.bt_refresh);
+//        ivUpdate = findViewById(R.id.iV_updateData);
+//        /* Initialising all of the views */
+//        mWeatherUi = findViewById(R.id.l_weatherUi);
+//        mLoadingIndicator = findViewById(R.id.pB_loading_indicator);
+//        tvNoData = findViewById(R.id.tV_noData);
+//        tvTodayDate = findViewById(R.id.tV_todayDate);
+//        tvTodayTemp = findViewById(R.id.tV_todayTemp);
+//        tvTodayDescription = findViewById(R.id.tV_todayDescription);
+//        tvTodayWindSpeed = findViewById(R.id.tV_todayWindSpeed);
+//        tvTodayWindDirection = findViewById(R.id.tV_todayWindDirection);
+//        tvLocation = findViewById(R.id.tV_lastLocation);
+//        ivTodayIcon = findViewById(R.id.iV_todayIcon);
+//        tvLastDataUpdated = findViewById(R.id.tV_lastUpdate);
+//
+//        /* Setting up the RecyclerView and Adapter*/
+//        mRecyclerView = findViewById(R.id.rV_weatherList);
+//        mRecyclerView.setHasFixedSize(true);
+//        LinearLayoutManager mLinearLayoutManager =
+//                new LinearLayoutManager(this);
+//        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+//        mAdapter = new WeatherAdapter(null, getApplicationContext());
+//        mRecyclerView.setAdapter(mAdapter);
+//
+//        /* Instantiating the IntentFilter and adding the intent we are looking for via .addAction() */
+//        mConnIntentFilter = new IntentFilter();
+//        mConnIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+//        /* Instantiating the BroadcastReceiver */
+//        mConnBroadcastReceiver = new ConnectivityBroadcastReceiver();
+//        /* Used to check if the device is connected to the internet */
+//        mConnectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//
+//        /* Registering the BroadcastReceiver and passing in the Intent Filter */
+//        registerReceiver(mConnBroadcastReceiver, mConnIntentFilter);
+//
+////        noDataScreen = false;
+//
+//        try {
+//            mainPresenter = new MainPresenter(this);
+//            mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        /* ImageView with onClickListener used to update the weather data */
+//        ivUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+////                noDataScreen = false;
+//
+//                try {
+//                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        /* Button used to refresh the weather data */
+//        btnRefreshData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+////                noDataScreen = true;
+//
+//                try {
+//                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
-        /* Setting up the RecyclerView and Adapter*/
-        mRecyclerView = findViewById(R.id.rV_weatherList);
-        mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager mLinearLayoutManager =
-                new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mAdapter = new WeatherAdapter(null, getApplicationContext());
-        mRecyclerView.setAdapter(mAdapter);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.openweathermap.org")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        /* Instantiating the IntentFilter and adding the intent we are looking for via .addAction() */
-        mConnIntentFilter = new IntentFilter();
-        mConnIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        /* Instantiating the BroadcastReceiver */
-        mConnBroadcastReceiver = new ConnectivityBroadcastReceiver();
-        /* Used to check if the device is connected to the internet */
-        mConnectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ApiMethods apiMethods = retrofit.create(ApiMethods.class);
 
-        /* Registering the BroadcastReceiver and passing in the Intent Filter */
-        registerReceiver(mConnBroadcastReceiver, mConnIntentFilter);
+        Call<WeatherModel> call = apiMethods.getWeather(
+                "50.00",
+                "50.00",
+                "json",
+                "metric",
+                "9f2b5e8d4a6eedad92948909b4690562"
+        );
 
-//        noDataScreen = false;
-
-        try {
-            mainPresenter = new MainPresenter(this);
-            mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        /* ImageView with onClickListener used to update the weather data */
-        ivUpdate.setOnClickListener(new View.OnClickListener() {
+        call.enqueue(new Callback<WeatherModel>() {
             @Override
-            public void onClick(View v) {
-
-//                noDataScreen = false;
-
-                try {
-                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+            public void onResponse(Call<WeatherModel> call, Response<WeatherModel> weatherModel) {
+                Log.d(TAG, "Retrofit Temp = " + weatherModel.body().getList().get(0).getMain().getTemp());
             }
-        });
 
-        /* Button used to refresh the weather data */
-        btnRefreshData.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-//                noDataScreen = true;
-
-                try {
-                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+            public void onFailure(Call<WeatherModel> call, Throwable t) {
+                Log.d(TAG, "Retrofit Error + " + t);
             }
         });
 

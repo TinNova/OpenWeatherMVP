@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.tin.openweathermvp.models.Weather;
+import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.sql.WeatherContract;
 
 import java.util.ArrayList;

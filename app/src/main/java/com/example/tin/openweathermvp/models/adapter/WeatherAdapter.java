@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tin.openweathermvp.R;
-import com.example.tin.openweathermvp.models.Weather;
+import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.utils.WeatherUtils;
 import com.squareup.picasso.Picasso;
 
