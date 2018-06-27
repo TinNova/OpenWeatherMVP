@@ -9,18 +9,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class City implements Parcelable {
 
-    @SerializedName("id")
     @Expose
     public Integer id;
-    @SerializedName("name")
     @Expose
     public String name;
-    @SerializedName("coord")
     @Expose
     public Coord coord;
-    @SerializedName("country")
     @Expose
     public String country;
+
     public final static Creator<City> CREATOR = new Creator<City>() {
 
 

@@ -11,25 +11,21 @@ import java.util.ArrayList;
 
 public class WeatherList implements Parcelable {
 
+    /** SerializedName only required if the variable you've provided is different than in the Json
+     * Here I've called it "unixDateTime", therefore a SerializedName is required. */
     @SerializedName("dt")
     @Expose
     public Long unixDateTime;
-    @SerializedName("main")
     @Expose
     public Main main;
-    @SerializedName("weather")
     @Expose
     public ArrayList<Weather> weather = null;
-    @SerializedName("clouds")
     @Expose
     public Clouds clouds;
-    @SerializedName("wind")
     @Expose
     public Wind wind;
-    @SerializedName("sys")
     @Expose
     public Sys sys;
-    @SerializedName("dt_txt")
     @Expose
     public String dtTxt;
     public final static Creator<WeatherList> CREATOR = new Creator<WeatherList>() {

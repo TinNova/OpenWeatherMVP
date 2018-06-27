@@ -9,12 +9,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class Coord implements Parcelable {
 
-    @SerializedName("lat")
     @Expose
     public Integer lat;
-    @SerializedName("lon")
     @Expose
     public Integer lon;
+
     public final static Creator<Coord> CREATOR = new Creator<Coord>() {
 
 

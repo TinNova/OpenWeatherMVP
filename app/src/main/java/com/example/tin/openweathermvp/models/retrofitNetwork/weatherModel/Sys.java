@@ -9,7 +9,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Sys implements Parcelable {
 
-    @SerializedName("pod")
     @Expose
     public String pod;
     public final static Creator<Sys> CREATOR = new Creator<Sys>() {

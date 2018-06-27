@@ -9,12 +9,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class Wind implements Parcelable {
 
-    @SerializedName("speed")
     @Expose
     public Double speed;
-    @SerializedName("deg")
     @Expose
     public Double deg;
+
     public final static Creator<Wind> CREATOR = new Creator<Wind>() {
 
 

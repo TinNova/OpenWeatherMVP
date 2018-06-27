@@ -11,19 +11,19 @@ import java.util.ArrayList;
 
 public class WeatherModel implements Parcelable {
 
-    @SerializedName("cod")
     @Expose
     public String cod;
-    @SerializedName("message")
     @Expose
     public Double message;
-    @SerializedName("cnt")
     @Expose
     public Integer cnt;
+    /**
+     * SerializedName only required if the name you've given the variable is different to the name in the Json
+     * If the vairable name is the same as in the Json, then SerializedName is not required
+     * */
     @SerializedName("list")
     @Expose
     public ArrayList<WeatherList> list = null;
-    @SerializedName("city")
     @Expose
     public City city;
     public final static Creator<WeatherModel> CREATOR = new Creator<WeatherModel>() {

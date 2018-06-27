@@ -9,9 +9,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Clouds implements Parcelable {
 
-    @SerializedName("all")
     @Expose
     public Integer all;
+
     public final static Creator<Clouds> CREATOR = new Creator<Clouds>() {
 
 
