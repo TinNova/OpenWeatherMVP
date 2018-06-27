@@ -45,4 +45,11 @@ public class Wind implements Parcelable {
         return 0;
     }
 
+    public Double getSpeed() {
+        return speed;
+    }
+
+    public Double getDeg() {
+        return deg;
+    }
 }

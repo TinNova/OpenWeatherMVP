@@ -74,7 +74,7 @@ public class MainPresenter implements MainContract.MainPresenter {
                     mainScreen.startWeatherService(saveSqlIntent);
 
                 /* Show weather on screen */
-                    mainScreen.showWeather(weather);
+                    //mainScreen.showWeather(weather);
                     mainScreen.hideLoading();
                 }
             });

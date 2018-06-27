@@ -128,7 +128,7 @@ public class WeatherJsonUtils {
                     );
 
                     mWeather.add(weather);
-                    Log.d(TAG, "Weather List: " + weather);
+                    Log.d(TAG, "Weather WeatherList: " + weather);
                 }
             }
         } catch (JSONException e) {

@@ -9,11 +9,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class List implements Parcelable {
+public class WeatherList implements Parcelable {
 
     @SerializedName("dt")
     @Expose
-    public Integer dt;
+    public Long unixDateTime;
     @SerializedName("main")
     @Expose
     public Main main;
@@ -32,21 +32,21 @@ public class List implements Parcelable {
     @SerializedName("dt_txt")
     @Expose
     public String dtTxt;
-    public final static Creator<List> CREATOR = new Creator<List>() {
+    public final static Creator<WeatherList> CREATOR = new Creator<WeatherList>() {
 
 
-        public List createFromParcel(Parcel in) {
-            return new List(in);
+        public WeatherList createFromParcel(Parcel in) {
+            return new WeatherList(in);
         }
 
-        public List[] newArray(int size) {
-            return (new List[size]);
+        public WeatherList[] newArray(int size) {
+            return (new WeatherList[size]);
         }
 
     };
 
-    protected List(Parcel in) {
-        this.dt = ((Integer) in.readValue((Integer.class.getClassLoader())));
+    public WeatherList(Parcel in) {
+        this.unixDateTime = ((Long) in.readValue((Integer.class.getClassLoader())));
         this.main = ((Main) in.readValue((Main.class.getClassLoader())));
         in.readList(this.weather, (Weather.class.getClassLoader()));
         this.clouds = ((Clouds) in.readValue((Clouds.class.getClassLoader())));
@@ -55,11 +55,11 @@ public class List implements Parcelable {
         this.dtTxt = ((String) in.readValue((String.class.getClassLoader())));
     }
 
-    public List() {
+    public WeatherList() {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(dt);
+        dest.writeValue(unixDateTime);
         dest.writeValue(main);
         dest.writeList(weather);
         dest.writeValue(clouds);
@@ -90,5 +90,9 @@ public class List implements Parcelable {
 
     public Sys getSys() {
         return sys;
+    }
+
+    public Long getUnixDateTime() {
+        return unixDateTime;
     }
 }

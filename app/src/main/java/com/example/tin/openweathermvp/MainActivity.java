@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,12 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tin.openweathermvp.models.retrofitNetwork.ApiMethods;
+import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
 import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherModel;
 import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.adapter.WeatherAdapter;
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -87,21 +88,21 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        /* Initialising all of the buttons */
-//        btnRefreshData = findViewById(R.id.bt_refresh);
-//        ivUpdate = findViewById(R.id.iV_updateData);
-//        /* Initialising all of the views */
-//        mWeatherUi = findViewById(R.id.l_weatherUi);
-//        mLoadingIndicator = findViewById(R.id.pB_loading_indicator);
-//        tvNoData = findViewById(R.id.tV_noData);
-//        tvTodayDate = findViewById(R.id.tV_todayDate);
-//        tvTodayTemp = findViewById(R.id.tV_todayTemp);
-//        tvTodayDescription = findViewById(R.id.tV_todayDescription);
-//        tvTodayWindSpeed = findViewById(R.id.tV_todayWindSpeed);
-//        tvTodayWindDirection = findViewById(R.id.tV_todayWindDirection);
-//        tvLocation = findViewById(R.id.tV_lastLocation);
-//        ivTodayIcon = findViewById(R.id.iV_todayIcon);
-//        tvLastDataUpdated = findViewById(R.id.tV_lastUpdate);
+        /* Initialising all of the buttons */
+        btnRefreshData = findViewById(R.id.bt_refresh);
+        ivUpdate = findViewById(R.id.iV_updateData);
+        /* Initialising all of the views */
+        mWeatherUi = findViewById(R.id.l_weatherUi);
+        mLoadingIndicator = findViewById(R.id.pB_loading_indicator);
+        tvNoData = findViewById(R.id.tV_noData);
+        tvTodayDate = findViewById(R.id.tV_todayDate);
+        tvTodayTemp = findViewById(R.id.tV_todayTemp);
+        tvTodayDescription = findViewById(R.id.tV_todayDescription);
+        tvTodayWindSpeed = findViewById(R.id.tV_todayWindSpeed);
+        tvTodayWindDirection = findViewById(R.id.tV_todayWindDirection);
+        tvLocation = findViewById(R.id.tV_lastLocation);
+        ivTodayIcon = findViewById(R.id.iV_todayIcon);
+        tvLastDataUpdated = findViewById(R.id.tV_lastUpdate);
 //
         /* Setting up the RecyclerView and Adapter*/
         mRecyclerView = findViewById(R.id.rV_weatherList);
@@ -179,10 +180,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
         call.enqueue(new Callback<WeatherModel>() {
             @Override
-            public void onResponse(Call<WeatherModel> call, Response<WeatherModel> weatherModel) {
-                Log.d(TAG, "Retrofit Temp = " + weatherModel.body().getList().get(0).getMain().getTemp());
+            public void onResponse(Call<WeatherModel> call, @NonNull Response<WeatherModel> weatherModel) {
+                Log.d(TAG, "Retrofit Temp = " + weatherModel.body().getWeatherList().get(0).getMain().getTemp());
 
-                mAdapter.setWeather(weatherModel);
+                ArrayList<WeatherList> list = new ArrayList<>(weatherModel.body().getWeatherList());
+
+                mAdapter.setWeather(list);
+
+                showWeather(list);
             }
 
             @Override
@@ -201,19 +206,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
     @Override
     /* Connect to adapter and display 0th weather on the today feature */
-    public void showWeather(ArrayList<Weather> weather) {
-        mAdapter.setWeather(weather);
+    public void showWeather(ArrayList<WeatherList> weatherlists) {
+        //mAdapter.setWeather(weather);
 
-        tvTodayDate.setText(convertUnixDateToHumanReadable(weather.get(0).getUnixDateTime()));
-        tvTodayDescription.setText(weather.get(0).getWeatherDescription());
+        tvTodayDate.setText(convertUnixDateToHumanReadable(weatherlists.get(0).getUnixDateTime()));
+        tvTodayDescription.setText(weatherlists.get(0).getWeather().get(0).getDescription());
         //tvLocation.setText(formatLatLon(this, sharedPrefLatLonArray));
         //tvLastDataUpdated.setText(formatLastUpdateTime(this, sharedPrefLatLonArray[2]));
-        tvTodayTemp.setText(formatTemperature(this, weather.get(0).getTempCurrent()));
-        tvTodayWindSpeed.setText(formatWindSpeed(this, weather.get(0).getWindSpeed()));
-        tvTodayWindDirection.setText(formatWindDirection(weather.get(0).getWindDegree()));
+        tvTodayTemp.setText(formatTemperature(this, weatherlists.get(0).getMain().getTemp()));
+        tvTodayWindSpeed.setText(formatWindSpeed(this, weatherlists.get(0).getWind().getSpeed()));
+        tvTodayWindDirection.setText(formatWindDirection(weatherlists.get(0).getWind().getDeg()));
 
         Picasso.with(MainActivity.this)
-                .load(getLargeArtResourceIdForWeatherCondition(weather.get(0).getWeatherId()))
+                .load(getLargeArtResourceIdForWeatherCondition(weatherlists.get(0).getWeather().get(0).getId()))
                 .into(ivTodayIcon);
     }
 

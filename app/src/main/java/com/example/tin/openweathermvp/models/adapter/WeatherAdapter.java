@@ -10,33 +10,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tin.openweathermvp.R;
-import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherModel;
-import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
+import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
 import com.example.tin.openweathermvp.models.utils.WeatherUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static com.example.tin.openweathermvp.models.utils.DateUtils.convertUnixDateToHumanReadable;
 import static com.example.tin.openweathermvp.models.utils.WeatherUtils.formatTemperature;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
 
-    private ArrayList<List> mWeatherList;
+    private ArrayList<WeatherList> mWeatherList;
     private Context context;
 
     /** CONTEXT PASSED IN VIA MAINACTIVITY<><><>IS THIS OKAY IN MVP???**/
-    public WeatherAdapter(ArrayList<List> mWeatherList, Context context) {
+    public WeatherAdapter(ArrayList<WeatherList> mWeatherList, Context context) {
         this.mWeatherList = mWeatherList;
         this.context = context;
     }
 
     // We are passing the weather data via a method, not when the Adapter is created
-    public void setWeather(WeatherModel weatherModel) {
-        this.mWeatherList = weatherModel;
+    public void setWeather(ArrayList<WeatherList> weatherList) {
+        this.mWeatherList = weatherList;
         notifyDataSetChanged();
-
     }
 
     /*
@@ -66,18 +62,18 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
 
-        List list = mWeatherList.get(position);
+        WeatherList list = mWeatherList.get(position);
 
         //viewHolder.tvDate.setText(convertUnixDateToHumanReadable(list.getUnixDateTime()));
-        viewHolder.tvDescription.setText(list.getWeatherDescription());
-        viewHolder.tvTemp.setText(formatTemperature(context, list.getTempCurrent()));
+        viewHolder.tvDescription.setText(list.getWeather().get(0).getDescription());
+        viewHolder.tvTemp.setText(formatTemperature(context, list.getMain().getTemp()));
 
-        Picasso.with(context).load(WeatherUtils.getSmallArtResourceIdForWeatherCondition(weather.getWeatherId()))
+        Picasso.with(context).load(WeatherUtils.getSmallArtResourceIdForWeatherCondition(list.getWeather().get(0).getId()))
                 .into(viewHolder.ivIcon);
     }
 
     /*
-     * Returns the number of items in the listItems List
+     * Returns the number of items in the listItems WeatherList
      */
     @Override
     public int getItemCount() {
@@ -87,6 +83,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
             return mWeatherList.size();
         }
     }
+
 
     /*
      * This is the ViewHolder Class, it represents the rows in the RecyclerView (i.e every row is a ViewHolder)

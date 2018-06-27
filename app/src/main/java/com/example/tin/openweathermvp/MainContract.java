@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 
+import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
 import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 
 import java.net.MalformedURLException;
@@ -20,7 +21,7 @@ public interface MainContract {
 
         void startWeatherService(Intent intent);
 
-        void showWeather(ArrayList<Weather> weather);
+        void showWeather(ArrayList<WeatherList> weatherLists);
 
         void getContext();
 

@@ -22,7 +22,7 @@ public class WeatherModel implements Parcelable {
     public Integer cnt;
     @SerializedName("list")
     @Expose
-    public ArrayList<List> list = null;
+    public ArrayList<WeatherList> list = null;
     @SerializedName("city")
     @Expose
     public City city;
@@ -43,7 +43,7 @@ public class WeatherModel implements Parcelable {
         this.cod = ((String) in.readValue((String.class.getClassLoader())));
         this.message = ((Double) in.readValue((Double.class.getClassLoader())));
         this.cnt = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        in.readList(this.list, (List.class.getClassLoader()));
+        in.readList(this.list, (WeatherList.class.getClassLoader()));
         this.city = ((City) in.readValue((City.class.getClassLoader())));
     }
 
@@ -62,7 +62,9 @@ public class WeatherModel implements Parcelable {
         return 0;
     }
 
-    public ArrayList<List> getList() {
+    public ArrayList<WeatherList> getWeatherList() {
         return list;
     }
+
+
 }
