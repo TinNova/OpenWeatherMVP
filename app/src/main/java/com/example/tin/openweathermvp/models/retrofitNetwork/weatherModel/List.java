@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class List implements Parcelable {
 
     @SerializedName("dt")
@@ -17,7 +19,7 @@ public class List implements Parcelable {
     public Main main;
     @SerializedName("weather")
     @Expose
-    public java.util.List<Weather> weather = null;
+    public ArrayList<Weather> weather = null;
     @SerializedName("clouds")
     @Expose
     public Clouds clouds;
@@ -72,5 +74,21 @@ public class List implements Parcelable {
 
     public Main getMain() {
         return main;
+    }
+
+    public ArrayList<Weather> getWeather() {
+        return weather;
+    }
+
+    public Clouds getClouds() {
+        return clouds;
+    }
+
+    public Wind getWind() {
+        return wind;
+    }
+
+    public Sys getSys() {
+        return sys;
     }
 }

@@ -103,14 +103,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 //        ivTodayIcon = findViewById(R.id.iV_todayIcon);
 //        tvLastDataUpdated = findViewById(R.id.tV_lastUpdate);
 //
-//        /* Setting up the RecyclerView and Adapter*/
-//        mRecyclerView = findViewById(R.id.rV_weatherList);
-//        mRecyclerView.setHasFixedSize(true);
-//        LinearLayoutManager mLinearLayoutManager =
-//                new LinearLayoutManager(this);
-//        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-//        mAdapter = new WeatherAdapter(null, getApplicationContext());
-//        mRecyclerView.setAdapter(mAdapter);
+        /* Setting up the RecyclerView and Adapter*/
+        mRecyclerView = findViewById(R.id.rV_weatherList);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager mLinearLayoutManager =
+                new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mAdapter = new WeatherAdapter(null, getApplicationContext());
+        mRecyclerView.setAdapter(mAdapter);
 //
 //        /* Instantiating the IntentFilter and adding the intent we are looking for via .addAction() */
 //        mConnIntentFilter = new IntentFilter();
@@ -181,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             @Override
             public void onResponse(Call<WeatherModel> call, Response<WeatherModel> weatherModel) {
                 Log.d(TAG, "Retrofit Temp = " + weatherModel.body().getList().get(0).getMain().getTemp());
+
+                mAdapter.setWeather(weatherModel);
             }
 
             @Override

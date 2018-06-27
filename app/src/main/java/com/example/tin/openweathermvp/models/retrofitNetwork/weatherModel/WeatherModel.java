@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class WeatherModel implements Parcelable {
 
     @SerializedName("cod")
@@ -20,7 +22,7 @@ public class WeatherModel implements Parcelable {
     public Integer cnt;
     @SerializedName("list")
     @Expose
-    public java.util.List<List> list = null;
+    public ArrayList<List> list = null;
     @SerializedName("city")
     @Expose
     public City city;
@@ -60,7 +62,7 @@ public class WeatherModel implements Parcelable {
         return 0;
     }
 
-    public java.util.List<List> getList() {
+    public ArrayList<List> getList() {
         return list;
     }
 }
