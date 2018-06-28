@@ -21,7 +21,7 @@ public class WeatherIntentService extends IntentService {
 
     private static final String TAG = WeatherIntentService.class.getSimpleName();
 
-    private ArrayList<Weather> mWeather;
+    private ArrayList<WeatherList> mWeatherList;
 
     public WeatherIntentService() {
         super("WeatherIntentService");
@@ -30,13 +30,13 @@ public class WeatherIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        Log.d(TAG, "IntentService Weather Data: " + mWeather);
+        Log.d(TAG, "IntentService Weather Data: " + mWeatherList);
 
         if (intent != null) {
 
-            mWeather = intent.getParcelableArrayListExtra(MainPresenter.SQL_WEATHER_DATA);
+            mWeatherList = intent.getParcelableArrayListExtra(MainPresenter.SQL_WEATHER_DATA);
 
-            ContentValues[] weatherValues = IntentServiceUtils.parseWeatherArrayToCv(mWeather);
+            ContentValues[] weatherValues = IntentServiceUtils.parseWeatherArrayToCv(mWeatherList);
 
             /*
              * If statement is used in case a null weatherValue is returned, this prevents a
@@ -60,7 +60,7 @@ public class WeatherIntentService extends IntentService {
 
                 Log.d(TAG, "The Data Added: " + Arrays.toString(weatherValues));
 
-                Log.d(TAG, "IntentService Weather Data: " + mWeather);
+                Log.d(TAG, "IntentService Weather Data: " + mWeatherList);
             }
         }
     }

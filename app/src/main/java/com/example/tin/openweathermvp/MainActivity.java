@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,10 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tin.openweathermvp.models.retrofitNetwork.ApiMethods;
 import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
-import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherModel;
-import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.adapter.WeatherAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -157,45 +153,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
                 }
             }
         });
-
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://api.openweathermap.org")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        ApiMethods apiMethods = retrofit.create(ApiMethods.class);
-//
-//        Call<WeatherModel> call = apiMethods.getWeather(
-//                "50.00",
-//                "50.00",
-//                "json",
-//                "metric",
-//                "9f2b5e8d4a6eedad92948909b4690562"
-//        );
-//
-//        call.enqueue(new Callback<WeatherModel>() {
-//            @Override
-//            public void onResponse(Call<WeatherModel> call, @NonNull Response<WeatherModel> weatherModel) {
-//                Log.d(TAG, "Retrofit Temp = " + weatherModel.body().getWeatherList().get(0).getMain().getTemp());
-//
-//                ArrayList<WeatherList> list = new ArrayList<>(weatherModel.body().getWeatherList());
-//
-//                mAdapter.setWeather(list);
-//
-//                showWeather(list);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<WeatherModel> call, Throwable t) {
-//                Log.d(TAG, "Retrofit Error + " + t);
-//            }
-//        });
-
     }
 
     @Override
     public void startWeatherService(Intent intent) {
         /* Starts the WeatherIntentService which saves data to SQLite */
+        /** Intent Service, never runs, therefore data is NOT saved to SQLite */
         startService(intent);
     }
 

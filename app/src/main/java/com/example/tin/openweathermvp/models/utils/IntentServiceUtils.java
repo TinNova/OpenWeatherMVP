@@ -19,35 +19,35 @@ public class IntentServiceUtils {
     private static final String TAG = IntentServiceUtils.class.getSimpleName();
 
     /* Method which launches the WeatherIntentService */
-    public static Bundle saveWeatherDataToSql(ArrayList<WeatherList> weatherLists) {
+    public static Bundle saveWeatherDataToSql(ArrayList<WeatherList> weatherList) {
 
         Bundle sqlIntentBundle = new Bundle();
 
-        if (weatherLists != null) {
-            sqlIntentBundle.putParcelableArrayList(SQL_WEATHER_DATA, weatherLists);
+        if (weatherList != null) {
+            sqlIntentBundle.putParcelableArrayList(SQL_WEATHER_DATA, weatherList);
         }
 
         return sqlIntentBundle;
     }
 
     /* Parsing the weather array into ContentValues in order to save them into the SQL database */
-    public static ContentValues[] parseWeatherArrayToCv(ArrayList<Weather> weather) {
+    public static ContentValues[] parseWeatherArrayToCv(ArrayList<WeatherList> weatherList) {
 
         /* ContentValues to save data to SQL */
-        ContentValues[] weatherContentValues = new ContentValues[weather.size()];
+        ContentValues[] weatherContentValues = new ContentValues[weatherList.size()];
 
         /* Using a for loop to cycle through each JsonObject within the listJsonArray */
-        for (int i = 0; i < weather.size(); i++) {
+        for (int i = 0; i < weatherList.size(); i++) {
 
-            long unixDateTime = weather.get(i).getUnixDateTime();
-            String calculateDateTime = weather.get(i).getCalculateDateTime();
-            double tempCurrent = weather.get(i).getTempCurrent();
-            double tempMin = weather.get(i).getTempMin();
-            double tempMax = weather.get(i).getTempMax();
-            String weatherDescription = weather.get(i).getWeatherDescription();
-            int weatherIcon = weather.get(i).getWeatherId();
-            double windSpeed = weather.get(i).getWindSpeed();
-            double windDegree = weather.get(i).getWindDegree();
+            long unixDateTime = weatherList.get(i).getUnixDateTime();
+            String calculateDateTime = weatherList.get(i).getCalculatedDateTime();
+            double tempCurrent = weatherList.get(i).getMain().getTemp();
+            double tempMin = weatherList.get(i).getMain().getTempMin();
+            double tempMax = weatherList.get(i).getMain().getTempMax();
+            String weatherDescription = weatherList.get(i).getWeather().get(0).getDescription();
+            int weatherIcon = weatherList.get(i).getWeather().get(0).getId();
+            double windSpeed = weatherList.get(i).getWind().getSpeed();
+            double windDegree = weatherList.get(i).getWind().getDeg();
 
             /* Preparing data for SQLite */
             ContentValues weatherValues = new ContentValues();

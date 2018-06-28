@@ -26,8 +26,9 @@ public class WeatherList implements Parcelable {
     public Wind wind;
     @Expose
     public Sys sys;
+    @SerializedName("dtTxt")
     @Expose
-    public String dtTxt;
+    public String calculatedDateTime;
     public final static Creator<WeatherList> CREATOR = new Creator<WeatherList>() {
 
 
@@ -48,7 +49,7 @@ public class WeatherList implements Parcelable {
         this.clouds = ((Clouds) in.readValue((Clouds.class.getClassLoader())));
         this.wind = ((Wind) in.readValue((Wind.class.getClassLoader())));
         this.sys = ((Sys) in.readValue((Sys.class.getClassLoader())));
-        this.dtTxt = ((String) in.readValue((String.class.getClassLoader())));
+        this.calculatedDateTime = ((String) in.readValue((String.class.getClassLoader())));
     }
 
     public WeatherList() {
@@ -61,7 +62,7 @@ public class WeatherList implements Parcelable {
         dest.writeValue(clouds);
         dest.writeValue(wind);
         dest.writeValue(sys);
-        dest.writeValue(dtTxt);
+        dest.writeValue(calculatedDateTime);
     }
 
     public int describeContents() {
@@ -90,5 +91,9 @@ public class WeatherList implements Parcelable {
 
     public Long getUnixDateTime() {
         return unixDateTime;
+    }
+
+    public String getCalculatedDateTime() {
+        return calculatedDateTime;
     }
 }

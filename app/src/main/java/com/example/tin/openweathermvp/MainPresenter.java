@@ -8,12 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.tin.openweathermvp.models.retrofitNetwork.RestService;
-import com.example.tin.openweathermvp.models.retrofitNetwork.WeatherQueryParams;
 import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
 import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherModel;
-import com.example.tin.openweathermvp.models.volleyNetwork.NetworkConnection;
-import com.example.tin.openweathermvp.models.volleyNetwork.NetworkListener;
-import com.example.tin.openweathermvp.models.volleyNetwork.NetworkUtils;
 import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.WeatherIntentService;
 import com.example.tin.openweathermvp.models.utils.IntentServiceUtils;
@@ -58,6 +54,7 @@ public class MainPresenter implements MainContract.MainPresenter {
             networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
 
+            mainScreen.showLoading();
             mContext = context;
 
             RestService.getInstance(context)
@@ -92,13 +89,11 @@ public class MainPresenter implements MainContract.MainPresenter {
 
                             saveSqlIntent.putExtras(weatherDataBundle);
 
-//                            /* Service is started from the View */
-//                            mainScreen.startWeatherService(saveSqlIntent);
-
-                            mainScreen.showWeather(list);
+                            /* Service is started from the View */
+                            mainScreen.startWeatherService(saveSqlIntent);
 
                             /* Show weather on screen */
-                            //mainScreen.showWeather(weather);
+                            mainScreen.showWeather(list);
                             mainScreen.hideLoading();
                         }
 
@@ -113,47 +108,17 @@ public class MainPresenter implements MainContract.MainPresenter {
 
                         }
 
-//            mainScreen.showLoading();
-
-
-//            String url = NetworkUtils.getUrl(50.00, 50.00);
-
-        /*
-         * Use the String URL "weatherRequestUrl" to request the JSON from the server
-         * and parse it
-         */
-//            NetworkConnection.getInstance(context).getResponseFromHttpUrl(url, new NetworkListener() {
-//                @Override
-//                public void getWeatherArrayList(ArrayList<Weather> weather) {
-//
-//                    mWeather = weather;
-//                /* Save Weather ContentValues to Bundle */
-//                    Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(mWeather);
-//                    /* Send Bundle to the SqlIntentService to be saved in SQLite */
-//                    Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
-//
-//                    saveSqlIntent.putExtras(weatherDataBundle);
-//
-//                /* Service is started from the View */
-//                    mainScreen.startWeatherService(saveSqlIntent);
-//
-//                /* Show weather on screen */
-//                    //mainScreen.showWeather(weather);
-//                    mainScreen.hideLoading();
-//                }
-//            });
-//        } else if (mWeather != null) {
-//
-//            /* Only display an no internet Toast, there is no need to load the SQL data as the
-//            * current data on the screen will be the most up to date, saves having to launch a loader */
-//            mainScreen.showNoNetworkMessage();
-//
-//        } else {
-//
-//            /* Show a no data screen, or if you have time, display the SQL data */
-//            mainScreen.showNoDataScreen();
-//            mainScreen.showNoNetworkMessage();
                     });
+
+        } else if (mWeather != null) {
+            /* Only display an no internet Toast, there is no need to load the SQL data as the
+            * current data on the screen will be the most up to date, saves having to launch a loader */
+            mainScreen.showNoNetworkMessage();
+
+        } else {
+            /* Show a no data screen, or if you have time, display the SQL data */
+            mainScreen.showNoDataScreen();
+            mainScreen.showNoNetworkMessage();
         }
 
     }

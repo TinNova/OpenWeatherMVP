@@ -73,4 +73,12 @@ public class Main implements Parcelable {
     public Double getTemp() {
         return temp;
     }
+
+    public Double getTempMin() {
+        return tempMin;
+    }
+
+    public Double getTempMax() {
+        return tempMax;
+    }
 }
