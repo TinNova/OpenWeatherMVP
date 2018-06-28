@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 
 import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
-import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;

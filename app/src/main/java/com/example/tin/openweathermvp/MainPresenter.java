@@ -10,7 +10,6 @@ import android.util.Log;
 import com.example.tin.openweathermvp.models.retrofitNetwork.RestService;
 import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
 import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherModel;
-import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.WeatherIntentService;
 import com.example.tin.openweathermvp.models.utils.IntentServiceUtils;
 
@@ -44,7 +43,7 @@ public class MainPresenter implements MainContract.MainPresenter {
         this.mainScreen = screen;
     }
 
-    ArrayList<Weather> mWeather;
+    ArrayList<WeatherList> mWeatherList;
 
     @Override
     public void getWeatherData(Context context, ConnectivityManager connectivityManager) throws MalformedURLException {
@@ -65,9 +64,26 @@ public class MainPresenter implements MainContract.MainPresenter {
                             "metric",
                             "9f2b5e8d4a6eedad92948909b4690562"
                     )
+                    /* .getWeather will GET the Json as an observable */
+
                     .subscribeOn(Schedulers.io())
+                    /* Above we are:
+                     * 1. Subscribing to the observable (i.e the parsed successful response or the error response that is returned (we are subscribing to the response that is returned)
+                     * 2. In "Schedulers.io()" we are Specifying the thread the stream should work within (io = Input Output)
+                     * RxJava/RxAndroid Schedulers are prebuilt threads where you can compute data away from the MainThread
+                     */
+
                     .observeOn(AndroidSchedulers.mainThread())
+                    /* Above we are:
+                     * 1. Specifying on which thread we want to see (or observe) the response, here we are stating we want it on the mainThread()
+                     */
+
                     .subscribe(new Observer<WeatherModel>() {
+                        /* Above we are:
+                         * 1. .subscribe this is where we subscribe to the returned response which we can interact with (error or successful)
+                         * 2. Here we can specify what to do once we have a successful response i.e launch the next activity
+                         */
+
                         @Override
                         public void onSubscribe(Disposable d) {
 
@@ -78,7 +94,7 @@ public class MainPresenter implements MainContract.MainPresenter {
 
                             Log.d(TAG, "onNext WeatherModel: " + weatherModel);
 
-                            Log.d(TAG, "Retrofit Temp = " + weatherModel.getWeatherList().get(0).getMain().getTemp());
+                            Log.d(TAG, "Retrofit Temp: " + weatherModel.getWeatherList().get(0).getMain().getTemp());
 
                             ArrayList<WeatherList> list = new ArrayList<>(weatherModel.getWeatherList());
 
@@ -110,7 +126,7 @@ public class MainPresenter implements MainContract.MainPresenter {
 
                     });
 
-        } else if (mWeather != null) {
+        } else if (mWeatherList != null) {
             /* Only display an no internet Toast, there is no need to load the SQL data as the
             * current data on the screen will be the most up to date, saves having to launch a loader */
             mainScreen.showNoNetworkMessage();
