@@ -27,6 +27,7 @@ import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.adapter.WeatherAdapter;
 import com.squareup.picasso.Picasso;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -112,89 +113,89 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mAdapter = new WeatherAdapter(null, getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
-//
-//        /* Instantiating the IntentFilter and adding the intent we are looking for via .addAction() */
-//        mConnIntentFilter = new IntentFilter();
-//        mConnIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-//        /* Instantiating the BroadcastReceiver */
-//        mConnBroadcastReceiver = new ConnectivityBroadcastReceiver();
-//        /* Used to check if the device is connected to the internet */
-//        mConnectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//
-//        /* Registering the BroadcastReceiver and passing in the Intent Filter */
-//        registerReceiver(mConnBroadcastReceiver, mConnIntentFilter);
-//
-////        noDataScreen = false;
-//
-//        try {
-//            mainPresenter = new MainPresenter(this);
-//            mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        /* ImageView with onClickListener used to update the weather data */
-//        ivUpdate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-////                noDataScreen = false;
-//
-//                try {
-//                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//
-//        /* Button used to refresh the weather data */
-//        btnRefreshData.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-////                noDataScreen = true;
-//
-//                try {
-//                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        /* Instantiating the IntentFilter and adding the intent we are looking for via .addAction() */
+        mConnIntentFilter = new IntentFilter();
+        mConnIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        /* Instantiating the BroadcastReceiver */
+        mConnBroadcastReceiver = new ConnectivityBroadcastReceiver();
+        /* Used to check if the device is connected to the internet */
+        mConnectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        ApiMethods apiMethods = retrofit.create(ApiMethods.class);
+        /* Registering the BroadcastReceiver and passing in the Intent Filter */
+        registerReceiver(mConnBroadcastReceiver, mConnIntentFilter);
 
-        Call<WeatherModel> call = apiMethods.getWeather(
-                "50.00",
-                "50.00",
-                "json",
-                "metric",
-                "9f2b5e8d4a6eedad92948909b4690562"
-        );
+//        noDataScreen = false;
 
-        call.enqueue(new Callback<WeatherModel>() {
+        try {
+            mainPresenter = new MainPresenter(this);
+            mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        /* ImageView with onClickListener used to update the weather data */
+        ivUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<WeatherModel> call, @NonNull Response<WeatherModel> weatherModel) {
-                Log.d(TAG, "Retrofit Temp = " + weatherModel.body().getWeatherList().get(0).getMain().getTemp());
+            public void onClick(View v) {
 
-                ArrayList<WeatherList> list = new ArrayList<>(weatherModel.body().getWeatherList());
+//                noDataScreen = false;
 
-                mAdapter.setWeather(list);
-
-                showWeather(list);
-            }
-
-            @Override
-            public void onFailure(Call<WeatherModel> call, Throwable t) {
-                Log.d(TAG, "Retrofit Error + " + t);
+                try {
+                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
+
+        /* Button used to refresh the weather data */
+        btnRefreshData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                noDataScreen = true;
+
+                try {
+                    mainPresenter.getWeatherData(MainActivity.this, mConnectionManager);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("http://api.openweathermap.org")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        ApiMethods apiMethods = retrofit.create(ApiMethods.class);
+//
+//        Call<WeatherModel> call = apiMethods.getWeather(
+//                "50.00",
+//                "50.00",
+//                "json",
+//                "metric",
+//                "9f2b5e8d4a6eedad92948909b4690562"
+//        );
+//
+//        call.enqueue(new Callback<WeatherModel>() {
+//            @Override
+//            public void onResponse(Call<WeatherModel> call, @NonNull Response<WeatherModel> weatherModel) {
+//                Log.d(TAG, "Retrofit Temp = " + weatherModel.body().getWeatherList().get(0).getMain().getTemp());
+//
+//                ArrayList<WeatherList> list = new ArrayList<>(weatherModel.body().getWeatherList());
+//
+//                mAdapter.setWeather(list);
+//
+//                showWeather(list);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<WeatherModel> call, Throwable t) {
+//                Log.d(TAG, "Retrofit Error + " + t);
+//            }
+//        });
 
     }
 

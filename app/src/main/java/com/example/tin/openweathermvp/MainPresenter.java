@@ -7,6 +7,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.tin.openweathermvp.models.retrofitNetwork.RestService;
+import com.example.tin.openweathermvp.models.retrofitNetwork.WeatherQueryParams;
+import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherModel;
 import com.example.tin.openweathermvp.models.volleyNetwork.NetworkConnection;
 import com.example.tin.openweathermvp.models.volleyNetwork.NetworkListener;
 import com.example.tin.openweathermvp.models.volleyNetwork.NetworkUtils;
@@ -16,6 +19,11 @@ import com.example.tin.openweathermvp.models.utils.IntentServiceUtils;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class MainPresenter implements MainContract.MainPresenter {
@@ -50,47 +58,85 @@ public class MainPresenter implements MainContract.MainPresenter {
         if (networkInfo != null && networkInfo.isConnected()) {
 
             mContext = context;
-            String url = NetworkUtils.getUrl(50.00, 50.00);
-            mainScreen.showLoading();
 
+            RestService.getInstance(context)
+                    .getWeather(
+                            "50.00",
+                            "50.00",
+                            "json",
+                            "metric",
+                            "9f2b5e8d4a6eedad92948909b4690562"
+                    )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<WeatherModel>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(WeatherModel weatherModel) {
+
+                            Log.d(TAG, "onNext WeatherModel: " + weatherModel);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                            Log.d(TAG, "onError: " + Log.getStackTraceString(e));
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+
+//            mainScreen.showLoading();
+
+
+//            String url = NetworkUtils.getUrl(50.00, 50.00);
 
         /*
          * Use the String URL "weatherRequestUrl" to request the JSON from the server
          * and parse it
          */
-            NetworkConnection.getInstance(context).getResponseFromHttpUrl(url, new NetworkListener() {
-                @Override
-                public void getWeatherArrayList(ArrayList<Weather> weather) {
-
-                    mWeather = weather;
-                /* Save Weather ContentValues to Bundle */
-                    Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(mWeather);
-                    /* Send Bundle to the SqlIntentService to be saved in SQLite */
-                    Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
-
-                    saveSqlIntent.putExtras(weatherDataBundle);
-
-                /* Service is started from the View */
-                    mainScreen.startWeatherService(saveSqlIntent);
-
-                /* Show weather on screen */
-                    //mainScreen.showWeather(weather);
-                    mainScreen.hideLoading();
-                }
-            });
-        } else if (mWeather != null) {
-
-            /* Only display an no internet Toast, there is no need to load the SQL data as the
-            * current data on the screen will be the most up to date, saves having to launch a loader */
-            mainScreen.showNoNetworkMessage();
-
-        } else {
-
-            /* Show a no data screen, or if you have time, display the SQL data */
-            mainScreen.showNoDataScreen();
-            mainScreen.showNoNetworkMessage();
+//            NetworkConnection.getInstance(context).getResponseFromHttpUrl(url, new NetworkListener() {
+//                @Override
+//                public void getWeatherArrayList(ArrayList<Weather> weather) {
+//
+//                    mWeather = weather;
+//                /* Save Weather ContentValues to Bundle */
+//                    Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(mWeather);
+//                    /* Send Bundle to the SqlIntentService to be saved in SQLite */
+//                    Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
+//
+//                    saveSqlIntent.putExtras(weatherDataBundle);
+//
+//                /* Service is started from the View */
+//                    mainScreen.startWeatherService(saveSqlIntent);
+//
+//                /* Show weather on screen */
+//                    //mainScreen.showWeather(weather);
+//                    mainScreen.hideLoading();
+//                }
+//            });
+//        } else if (mWeather != null) {
+//
+//            /* Only display an no internet Toast, there is no need to load the SQL data as the
+//            * current data on the screen will be the most up to date, saves having to launch a loader */
+//            mainScreen.showNoNetworkMessage();
+//
+//        } else {
+//
+//            /* Show a no data screen, or if you have time, display the SQL data */
+//            mainScreen.showNoDataScreen();
+//            mainScreen.showNoNetworkMessage();
+                    });
         }
     }
+
+
 
     @Override
     public void onConnectionChanged(Boolean networkConnActive) {
