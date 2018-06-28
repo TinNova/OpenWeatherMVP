@@ -30,12 +30,6 @@ import com.squareup.picasso.Picasso;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 import static com.example.tin.openweathermvp.models.utils.DateUtils.convertUnixDateToHumanReadable;
 import static com.example.tin.openweathermvp.models.utils.WeatherUtils.formatTemperature;
 import static com.example.tin.openweathermvp.models.utils.WeatherUtils.formatWindDirection;
@@ -207,19 +201,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
     @Override
     /* Connect to adapter and display 0th weather on the today feature */
-    public void showWeather(ArrayList<WeatherList> weatherlists) {
-        //mAdapter.setWeather(weather);
+    public void showWeather(ArrayList<WeatherList> weatherList) {
+        mAdapter.setWeather(weatherList);
 
-        tvTodayDate.setText(convertUnixDateToHumanReadable(weatherlists.get(0).getUnixDateTime()));
-        tvTodayDescription.setText(weatherlists.get(0).getWeather().get(0).getDescription());
+        tvTodayDate.setText(convertUnixDateToHumanReadable(weatherList.get(0).getUnixDateTime()));
+        tvTodayDescription.setText(weatherList.get(0).getWeather().get(0).getDescription());
         //tvLocation.setText(formatLatLon(this, sharedPrefLatLonArray));
         //tvLastDataUpdated.setText(formatLastUpdateTime(this, sharedPrefLatLonArray[2]));
-        tvTodayTemp.setText(formatTemperature(this, weatherlists.get(0).getMain().getTemp()));
-        tvTodayWindSpeed.setText(formatWindSpeed(this, weatherlists.get(0).getWind().getSpeed()));
-        tvTodayWindDirection.setText(formatWindDirection(weatherlists.get(0).getWind().getDeg()));
+        tvTodayTemp.setText(formatTemperature(this, weatherList.get(0).getMain().getTemp()));
+        tvTodayWindSpeed.setText(formatWindSpeed(this, weatherList.get(0).getWind().getSpeed()));
+        tvTodayWindDirection.setText(formatWindDirection(weatherList.get(0).getWind().getDeg()));
 
         Picasso.with(MainActivity.this)
-                .load(getLargeArtResourceIdForWeatherCondition(weatherlists.get(0).getWeather().get(0).getId()))
+                .load(getLargeArtResourceIdForWeatherCondition(weatherList.get(0).getWeather().get(0).getId()))
                 .into(ivTodayIcon);
     }
 

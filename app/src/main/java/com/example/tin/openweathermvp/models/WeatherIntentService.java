@@ -8,12 +8,13 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.tin.openweathermvp.MainPresenter;
+import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
 import com.example.tin.openweathermvp.models.sql.WeatherContract;
 import com.example.tin.openweathermvp.models.utils.IntentServiceUtils;
 import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 
 import java.util.ArrayList;
-
+import java.util.Arrays;
 
 
 public class WeatherIntentService extends IntentService {
@@ -57,7 +58,7 @@ public class WeatherIntentService extends IntentService {
                         WeatherContract.WeatherEntry.CONTENT_URI,
                         weatherValues);
 
-                Log.d(TAG, "The Data Added: " + weatherValues);
+                Log.d(TAG, "The Data Added: " + Arrays.toString(weatherValues));
 
                 Log.d(TAG, "IntentService Weather Data: " + mWeather);
             }

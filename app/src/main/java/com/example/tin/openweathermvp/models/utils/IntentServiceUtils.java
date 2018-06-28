@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
 import com.example.tin.openweathermvp.models.volleyNetwork.Weather;
 import com.example.tin.openweathermvp.models.sql.WeatherContract;
 
@@ -18,12 +19,12 @@ public class IntentServiceUtils {
     private static final String TAG = IntentServiceUtils.class.getSimpleName();
 
     /* Method which launches the WeatherIntentService */
-    public static Bundle saveWeatherDataToSql(ArrayList<Weather> weather) {
+    public static Bundle saveWeatherDataToSql(ArrayList<WeatherList> weatherLists) {
 
         Bundle sqlIntentBundle = new Bundle();
 
-        if (weather != null) {
-            sqlIntentBundle.putParcelableArrayList(SQL_WEATHER_DATA, weather);
+        if (weatherLists != null) {
+            sqlIntentBundle.putParcelableArrayList(SQL_WEATHER_DATA, weatherLists);
         }
 
         return sqlIntentBundle;

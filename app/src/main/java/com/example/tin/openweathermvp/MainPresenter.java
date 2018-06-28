@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.tin.openweathermvp.models.retrofitNetwork.RestService;
 import com.example.tin.openweathermvp.models.retrofitNetwork.WeatherQueryParams;
+import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherList;
 import com.example.tin.openweathermvp.models.retrofitNetwork.weatherModel.WeatherModel;
 import com.example.tin.openweathermvp.models.volleyNetwork.NetworkConnection;
 import com.example.tin.openweathermvp.models.volleyNetwork.NetworkListener;
@@ -79,6 +80,26 @@ public class MainPresenter implements MainContract.MainPresenter {
                         public void onNext(WeatherModel weatherModel) {
 
                             Log.d(TAG, "onNext WeatherModel: " + weatherModel);
+
+                            Log.d(TAG, "Retrofit Temp = " + weatherModel.getWeatherList().get(0).getMain().getTemp());
+
+                            ArrayList<WeatherList> list = new ArrayList<>(weatherModel.getWeatherList());
+
+                            /* Save Weather ContentValues to Bundle */
+                            Bundle weatherDataBundle = IntentServiceUtils.saveWeatherDataToSql(list);
+                            /* Send Bundle to the SqlIntentService to be saved in SQLite */
+                            Intent saveSqlIntent = new Intent((Context) mainScreen, WeatherIntentService.class);
+
+                            saveSqlIntent.putExtras(weatherDataBundle);
+
+//                            /* Service is started from the View */
+//                            mainScreen.startWeatherService(saveSqlIntent);
+
+                            mainScreen.showWeather(list);
+
+                            /* Show weather on screen */
+                            //mainScreen.showWeather(weather);
+                            mainScreen.hideLoading();
                         }
 
                         @Override
@@ -134,8 +155,8 @@ public class MainPresenter implements MainContract.MainPresenter {
 //            mainScreen.showNoNetworkMessage();
                     });
         }
-    }
 
+    }
 
 
     @Override
