@@ -5,7 +5,7 @@ viewable for 24hrs, after which point it get deleted as it is no longer relevant
 
 
 ### Technologies Used
-- Retrofit
+- Volley
 - SQL
 - SharedPreferences
 - Picasso
